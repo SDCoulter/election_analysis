@@ -44,27 +44,43 @@ with open(DATA_FILE) as f_obj:
         # Increment candidate's votes each time their name appears.
         candidate_votes[candidate_name] += 1
 
-# Get the votes each and percentage of the total vote.
-for name in candidate_options:
-    ind_votes = candidate_votes[name]
-    # Find the percentage - (is there need for float()?).
-    vote_percent = float(ind_votes) / float(total_votes) * 100
-    # Print out the data using F-string formatting.
-    print(f"{name}: {vote_percent:.1f}% ({ind_votes:,})\n")
+with open(ANALYSIS_FILE, "w") as f_obj:
+    # Add some formatting for our text output file.
+    election_results = (
+        f"\nElection Results\n"
+        f"-------------------------\n"
+        f"Total Votes: {total_votes:,}\n"
+        f"-------------------------\n")
+    print(election_results, end="")
+    # Save to the file.
+    f_obj.write(election_results)
 
-    # Find the winner of the election.
-    if (ind_votes > winning_count) and (vote_percent > winning_percentage):
-        # If a candidate has a higher vote count assign that data to
-        # the winning variables.
-        winning_candidate = name
-        winning_count = ind_votes
-        winning_percentage = vote_percent
+    # Get the votes each and percentage of the total vote.
+    for name in candidate_options:
+        ind_votes = candidate_votes[name]
+        # Find the percentage - (is there need for float()?).
+        vote_percent = float(ind_votes) / float(total_votes) * 100
+        # Save the candidate's results string and use F-string formatting.
+        candidate_results = f"{name}: {vote_percent:.1f}% ({ind_votes:,})\n"
+        # Then print to terminal and write to our output file.
+        print(candidate_results)
+        f_obj.write(candidate_results)
 
-# Winning candidate summary.
-winning_candidate_summary = (
-    f"-------------------------\n"
-    f"Winner: {winning_candidate}\n"
-    f"Winning Vote Count: {winning_count:,}\n"
-    f"Winning Percentage: {winning_percentage:.1f}%\n"
-    f"-------------------------\n")
-print(winning_candidate_summary)
+        # Find the winner of the election.
+        if (ind_votes > winning_count) and (vote_percent > winning_percentage):
+            # If a candidate has a higher vote count assign that data to
+            # the winning variables.
+            winning_candidate = name
+            winning_count = ind_votes
+            winning_percentage = vote_percent
+
+    # Winning candidate summary.
+    winning_candidate_summary = (
+        f"-------------------------\n"
+        f"Winner: {winning_candidate}\n"
+        f"Winning Vote Count: {winning_count:,}\n"
+        f"Winning Percentage: {winning_percentage:.1f}%\n"
+        f"-------------------------\n")
+    # Save this summary to the output text file.
+    print(winning_candidate_summary)
+    f_obj.write(winning_candidate_summary)
