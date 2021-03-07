@@ -5,6 +5,18 @@
 # 4. Percentage of votes each candidate won
 # 5. The winner of the election based on popular vote
 
-import csv
+import os, csv
 
-FILENAME = "resources\\election_results.csv"
+# Assign file paths and names to variables.
+# One for the initial data, and one for the analysis to be performed.
+DATA_FILE = os.path.join("resources", "election_results.csv")
+ANALYSIS_FILE = os.path.join("analysis", "election_analysis.txt")
+
+# Open these election results and read the file.
+with open(DATA_FILE) as f_obj:
+    # Read the file object with the reader function.
+    file_reader = csv.reader(f_obj)
+    # Save the headers and move on - don't need to analyze.
+    headers = next(file_reader)
+
+    print(headers)
